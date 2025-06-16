@@ -1,7 +1,8 @@
-
 import React, { useState, useEffect } from 'react';
 import { RefreshCcw, Download, Copy, Search } from 'lucide-react';
 import { generateRandomNames, downloadAsText, downloadAsCSV, copyToClipboard, type GenderFilter, type GeneratedName } from '../utils/nameGenerator';
+import { countryNameData, getAvailableCountries, type CountryCode } from '../data/countryNames';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from './ui/select';
 import NameCard from './NameCard';
 import ThemeToggle from './ThemeToggle';
 import { toast } from '@/hooks/use-toast';
@@ -10,6 +11,7 @@ const NameGenerator: React.FC = () => {
   const [names, setNames] = useState<GeneratedName[]>([]);
   const [filteredNames, setFilteredNames] = useState<GeneratedName[]>([]);
   const [genderFilter, setGenderFilter] = useState<GenderFilter>('mixed');
+  const [country, setCountry] = useState<CountryCode>('usa');
   const [isGenerating, setIsGenerating] = useState(false);
   const [nameCount, setNameCount] = useState(100);
   const [searchQuery, setSearchQuery] = useState('');
@@ -36,13 +38,13 @@ const NameGenerator: React.FC = () => {
     setIsGenerating(true);
     // Add a small delay for better UX
     setTimeout(() => {
-      const newNames = generateRandomNames(nameCount, genderFilter);
+      const newNames = generateRandomNames(nameCount, genderFilter, country);
       setNames(newNames);
       setSearchQuery(''); // Clear search when generating new names
       setIsGenerating(false);
       toast({
         title: "Names Generated!",
-        description: `Generated ${nameCount} random names`,
+        description: `Generated ${nameCount} random ${countryNameData[country].label.split(' ')[1]} names`,
       });
     }, 500);
   };
@@ -67,7 +69,7 @@ const NameGenerator: React.FC = () => {
 
   const handleDownloadTxt = () => {
     const namesToDownload = filteredNames.length > 0 ? filteredNames : names;
-    downloadAsText(namesToDownload, `random-names-${genderFilter}.txt`);
+    downloadAsText(namesToDownload, `random-names-${country}-${genderFilter}.txt`);
     toast({
       title: "Download started",
       description: "Names downloaded as TXT file",
@@ -76,7 +78,7 @@ const NameGenerator: React.FC = () => {
 
   const handleDownloadCsv = () => {
     const namesToDownload = filteredNames.length > 0 ? filteredNames : names;
-    downloadAsCSV(namesToDownload, `random-names-${genderFilter}.csv`);
+    downloadAsCSV(namesToDownload, `random-names-${country}-${genderFilter}.csv`);
     toast({
       title: "Download started",
       description: "Names downloaded as CSV file",
@@ -105,7 +107,7 @@ const NameGenerator: React.FC = () => {
                 </span>
               </h1>
               <p className="text-xl text-white/80 max-w-2xl">
-                Generate thousands of random names instantly. Perfect for writing, testing, or creative projects.
+                Generate thousands of random names from different countries. Perfect for writing, testing, or creative projects.
               </p>
             </div>
             <ThemeToggle />
@@ -113,7 +115,26 @@ const NameGenerator: React.FC = () => {
 
           {/* Controls */}
           <div className="bg-white/10 backdrop-blur-md rounded-2xl p-6 border border-white/20 mb-8">
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6">
+              {/* Country Selector */}
+              <div>
+                <label className="block text-white/80 text-sm font-medium mb-3">
+                  Country
+                </label>
+                <Select value={country} onValueChange={(value: CountryCode) => setCountry(value)}>
+                  <SelectTrigger className="w-full bg-white/90 dark:bg-gray-800">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700">
+                    {getAvailableCountries().map((countryCode) => (
+                      <SelectItem key={countryCode} value={countryCode}>
+                        {countryNameData[countryCode].label}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+
               {/* Gender Filter - Button Group */}
               <div>
                 <label className="block text-white/80 text-sm font-medium mb-3">
@@ -121,9 +142,9 @@ const NameGenerator: React.FC = () => {
                 </label>
                 <div className="flex rounded-lg overflow-hidden border border-white/20">
                   {[
-                    { value: 'mixed', label: '⚧ Mixed', emoji: '⚧' },
-                    { value: 'male', label: '♂ Male', emoji: '♂' },
-                    { value: 'female', label: '♀ Female', emoji: '♀' }
+                    { value: 'mixed', label: '⚧ Mixed' },
+                    { value: 'male', label: '♂ Male' },
+                    { value: 'female', label: '♀ Female' }
                   ].map(({ value, label }) => (
                     <button
                       key={value}
@@ -239,7 +260,7 @@ const NameGenerator: React.FC = () => {
 
             <div className="text-center mb-8">
               <h2 className="text-2xl font-bold text-white mb-2">
-                {displayedNames.length} Random Names Generated
+                {displayedNames.length} Random {countryNameData[country].label.split(' ')[1]} Names Generated
                 {searchQuery && (
                   <span className="block text-lg text-white/70 mt-1">
                     Filtered from {names.length} total names
@@ -251,7 +272,7 @@ const NameGenerator: React.FC = () => {
               </p>
               {displayedNames.length > 0 && (
                 <p className="text-white/50 text-sm mt-2">
-                  Generated using SSA and US Census data. Perfect for writers, developers, and creative projects.
+                  Generated using authentic {countryNameData[country].label.split(' ')[1]} naming conventions. Perfect for writers, developers, and creative projects.
                 </p>
               )}
             </div>

@@ -1,5 +1,4 @@
-
-import { maleNames, femaleNames, lastNames } from '../data/names';
+import { countryNameData, type CountryCode } from '../data/countryNames';
 
 export type GenderFilter = 'male' | 'female' | 'mixed';
 
@@ -9,10 +8,20 @@ export interface GeneratedName {
   lastName: string;
   fullName: string;
   gender: 'male' | 'female';
+  country: CountryCode;
 }
 
-export const generateRandomNames = (count: number = 1000, genderFilter: GenderFilter = 'mixed'): GeneratedName[] => {
+export const generateRandomNames = (
+  count: number = 100, 
+  genderFilter: GenderFilter = 'mixed',
+  country: CountryCode = 'usa'
+): GeneratedName[] => {
   const names: GeneratedName[] = [];
+  const countryData = countryNameData[country];
+  
+  if (!countryData) {
+    throw new Error(`Country ${country} not supported`);
+  }
   
   for (let i = 0; i < count; i++) {
     let firstName: string;
@@ -21,17 +30,17 @@ export const generateRandomNames = (count: number = 1000, genderFilter: GenderFi
     if (genderFilter === 'mixed') {
       gender = Math.random() > 0.5 ? 'male' : 'female';
       firstName = gender === 'male' 
-        ? maleNames[Math.floor(Math.random() * maleNames.length)]
-        : femaleNames[Math.floor(Math.random() * femaleNames.length)];
+        ? countryData.male[Math.floor(Math.random() * countryData.male.length)]
+        : countryData.female[Math.floor(Math.random() * countryData.female.length)];
     } else if (genderFilter === 'male') {
       gender = 'male';
-      firstName = maleNames[Math.floor(Math.random() * maleNames.length)];
+      firstName = countryData.male[Math.floor(Math.random() * countryData.male.length)];
     } else {
       gender = 'female';
-      firstName = femaleNames[Math.floor(Math.random() * femaleNames.length)];
+      firstName = countryData.female[Math.floor(Math.random() * countryData.female.length)];
     }
     
-    const lastName = lastNames[Math.floor(Math.random() * lastNames.length)];
+    const lastName = countryData.lastNames[Math.floor(Math.random() * countryData.lastNames.length)];
     const fullName = `${firstName} ${lastName}`;
     
     names.push({
@@ -39,7 +48,8 @@ export const generateRandomNames = (count: number = 1000, genderFilter: GenderFi
       firstName,
       lastName,
       fullName,
-      gender
+      gender,
+      country
     });
   }
   
@@ -61,14 +71,15 @@ export const downloadAsText = (names: GeneratedName[], filename: string = 'rando
 };
 
 export const downloadAsCSV = (names: GeneratedName[], filename: string = 'random-names.csv') => {
-  const headers = ['First Name', 'Last Name', 'Full Name', 'Gender'];
+  const headers = ['First Name', 'Last Name', 'Full Name', 'Gender', 'Country'];
   const csvContent = [
     headers.join(','),
     ...names.map(name => [
       name.firstName,
       name.lastName,
       name.fullName,
-      name.gender
+      name.gender,
+      name.country
     ].join(','))
   ].join('\n');
   
