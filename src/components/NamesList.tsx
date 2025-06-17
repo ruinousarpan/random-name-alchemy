@@ -28,10 +28,10 @@ const NamesList: React.FC<NamesListProps> = ({
 
   if (isGenerating) {
     return (
-      <div className="flex items-center justify-center py-20">
+      <div className="flex items-center justify-center py-16">
         <div className="text-center">
-          <RefreshCcw className="w-12 h-12 text-white animate-spin mx-auto mb-4" />
-          <p className="text-white/80 text-lg">Generating random names...</p>
+          <RefreshCcw className="w-10 h-10 text-white animate-spin mx-auto mb-3" />
+          <p className="text-white/80 text-base">Generating random names...</p>
         </div>
       </div>
     );
@@ -40,52 +40,58 @@ const NamesList: React.FC<NamesListProps> = ({
   return (
     <>
       {/* Search Bar */}
-      <div className="max-w-md mx-auto mb-8">
+      <div className="max-w-md mx-auto mb-6">
         <div className="relative">
-          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
+          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
           <input
             type="text"
             placeholder="Search names..."
             value={searchQuery}
             onChange={(e) => onSearchChange(e.target.value)}
-            className="w-full pl-10 pr-4 py-3 bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm rounded-xl border border-gray-200/50 dark:border-gray-700/50 focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all duration-200"
+            className="w-full pl-9 pr-3 py-2.5 bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm rounded-lg border border-gray-200/50 dark:border-gray-700/50 focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all duration-200 text-sm"
           />
         </div>
       </div>
 
-      <div className="text-center mb-8">
-        <h2 className="text-2xl font-bold text-white mb-2">
+      <div className="text-center mb-6">
+        <h2 className="text-xl font-bold text-white mb-1">
           {displayedNames.length} Random {countryNameData[country].label.split(' ')[1]} Names Generated
           {searchQuery && (
-            <span className="block text-lg text-white/70 mt-1">
+            <span className="block text-base text-white/70 mt-0.5">
               Filtered from {names.length} total names
             </span>
           )}
         </h2>
-        <p className="text-white/60">
+        <p className="text-white/60 text-sm">
           Click any name to copy it to your clipboard
         </p>
         {displayedNames.length > 0 && (
-          <p className="text-white/50 text-sm mt-2">
+          <p className="text-white/50 text-xs mt-1">
             Generated using authentic {countryNameData[country].label.split(' ')[1]} naming conventions. Perfect for writers, developers, and creative projects.
           </p>
         )}
       </div>
       
       {displayedNames.length > 0 ? (
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 gap-3">
-          {displayedNames.map((name) => (
-            <NameCard key={name.id} name={name} />
+        <div className="grid grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 2xl:grid-cols-8 gap-2">
+          {displayedNames.map((name, index) => (
+            <div
+              key={name.id}
+              className="animate-slide-in"
+              style={{ animationDelay: `${index * 20}ms` }}
+            >
+              <NameCard name={name} />
+            </div>
           ))}
         </div>
       ) : searchQuery ? (
-        <div className="text-center py-12">
-          <div className="text-white/60 text-lg mb-4">
+        <div className="text-center py-10">
+          <div className="text-white/60 text-base mb-3">
             No names found matching "{searchQuery}"
           </div>
           <button
             onClick={onClearSearch}
-            className="px-4 py-2 bg-white/20 hover:bg-white/30 text-white rounded-lg transition-colors"
+            className="px-3 py-1.5 bg-white/20 hover:bg-white/30 text-white rounded-md transition-colors text-sm"
           >
             Clear Search
           </button>

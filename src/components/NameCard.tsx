@@ -47,20 +47,20 @@ const NameCard: React.FC<NameCardProps> = ({ name }) => {
   const genderEmoji = name.gender === 'male' ? '♂️' : '♀️';
 
   return (
-    <div className="group bg-white/95 dark:bg-gray-800/95 backdrop-blur-sm rounded-lg p-3 border border-gray-200/60 dark:border-gray-700/60 hover:shadow-md hover:shadow-purple-500/20 transition-all duration-300 hover:-translate-y-1 cursor-pointer transform hover:scale-102 active:scale-98 touch-manipulation"
+    <div className="group bg-white/95 dark:bg-gray-800/95 backdrop-blur-sm rounded-lg p-2 border border-gray-200/60 dark:border-gray-700/60 hover:shadow-lg hover:shadow-purple-500/25 transition-all duration-300 hover:-translate-y-1 cursor-pointer transform hover:scale-105 active:scale-95 touch-manipulation"
          onClick={handleCopy}>
       <div className="flex items-center justify-between">
-        <div className="flex items-center gap-2 flex-1 min-w-0">
-          <div className={`w-8 h-8 rounded-full flex items-center justify-center ${avatarColor} transition-all duration-200 group-hover:scale-110 font-semibold text-sm shadow-sm`}>
+        <div className="flex items-center gap-1.5 flex-1 min-w-0">
+          <div className={`w-6 h-6 rounded-full flex items-center justify-center ${avatarColor} transition-all duration-200 group-hover:scale-110 font-semibold text-xs shadow-sm`}>
             {name.firstName.charAt(0).toUpperCase()}
           </div>
           <div className="flex-1 min-w-0">
-            <h3 className="font-medium text-gray-900 dark:text-white text-sm group-hover:text-purple-600 dark:group-hover:text-purple-400 transition-colors truncate">
+            <h3 className="font-medium text-gray-900 dark:text-white text-xs group-hover:text-purple-600 dark:group-hover:text-purple-400 transition-colors truncate">
               {name.fullName}
             </h3>
-            <div className="flex items-center gap-2 mt-0.5">
-              <span className="text-xs text-gray-500 dark:text-gray-400 capitalize">
-                {genderEmoji} {name.gender}
+            <div className="flex items-center gap-1 mt-0.5">
+              <span className="text-xs text-gray-500 dark:text-gray-400">
+                {genderEmoji}
               </span>
               <span className="text-xs text-gray-400 dark:text-gray-500 uppercase tracking-wide font-medium">
                 {name.country}
@@ -70,19 +70,19 @@ const NameCard: React.FC<NameCardProps> = ({ name }) => {
         </div>
         
         <button
-          className="opacity-0 group-hover:opacity-100 p-2 rounded-md bg-gray-100/80 dark:bg-gray-700/80 hover:bg-gray-200 dark:hover:bg-gray-600 transition-all duration-200 transform hover:scale-110 active:scale-95 touch-manipulation"
+          className="opacity-0 group-hover:opacity-100 p-1 rounded-md bg-gray-100/80 dark:bg-gray-700/80 hover:bg-gray-200 dark:hover:bg-gray-600 transition-all duration-200 transform hover:scale-110 active:scale-95 touch-manipulation"
           aria-label={`Copy ${name.fullName}`}
           onClick={(e) => {
             e.stopPropagation();
             handleCopy();
           }}
         >
-          <Copy className="w-3 h-3 text-gray-600 dark:text-gray-300" />
+          <Copy className="w-2.5 h-2.5 text-gray-600 dark:text-gray-300" />
         </button>
       </div>
       
       {/* Subtle click indicator */}
-      <div className="mt-2 text-xs text-center text-gray-400 dark:text-gray-500 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+      <div className="mt-1 text-xs text-center text-gray-400 dark:text-gray-500 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
         Click to copy
       </div>
     </div>
