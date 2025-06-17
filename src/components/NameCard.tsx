@@ -25,18 +25,18 @@ const NameCard: React.FC<NameCardProps> = ({ name }) => {
     }
   };
 
-  // Generate random avatar colors for visual variety
+  // Improved avatar colors with better contrast
   const avatarColors = [
-    'bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400',
-    'bg-green-100 dark:bg-green-900/30 text-green-600 dark:text-green-400',
-    'bg-purple-100 dark:bg-purple-900/30 text-purple-600 dark:text-purple-400',
-    'bg-orange-100 dark:bg-orange-900/30 text-orange-600 dark:text-orange-400',
-    'bg-red-100 dark:bg-red-900/30 text-red-600 dark:text-red-400',
-    'bg-yellow-100 dark:bg-yellow-900/30 text-yellow-600 dark:text-yellow-400',
-    'bg-indigo-100 dark:bg-indigo-900/30 text-indigo-600 dark:text-indigo-400',
-    'bg-pink-100 dark:bg-pink-900/30 text-pink-600 dark:text-pink-400',
-    'bg-teal-100 dark:bg-teal-900/30 text-teal-600 dark:text-teal-400',
-    'bg-cyan-100 dark:bg-cyan-900/30 text-cyan-600 dark:text-cyan-400',
+    'bg-gradient-to-br from-blue-500 to-blue-600 text-white',
+    'bg-gradient-to-br from-emerald-500 to-emerald-600 text-white',
+    'bg-gradient-to-br from-purple-500 to-purple-600 text-white',
+    'bg-gradient-to-br from-orange-500 to-orange-600 text-white',
+    'bg-gradient-to-br from-pink-500 to-pink-600 text-white',
+    'bg-gradient-to-br from-indigo-500 to-indigo-600 text-white',
+    'bg-gradient-to-br from-teal-500 to-teal-600 text-white',
+    'bg-gradient-to-br from-cyan-500 to-cyan-600 text-white',
+    'bg-gradient-to-br from-violet-500 to-violet-600 text-white',
+    'bg-gradient-to-br from-rose-500 to-rose-600 text-white',
   ];
 
   // Use name hash to consistently assign colors
@@ -47,22 +47,22 @@ const NameCard: React.FC<NameCardProps> = ({ name }) => {
   const genderEmoji = name.gender === 'male' ? '♂️' : '♀️';
 
   return (
-    <div className="group bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-xl p-4 border border-gray-200/50 dark:border-gray-700/50 hover:shadow-lg hover:shadow-purple-500/10 transition-all duration-300 hover:-translate-y-1 cursor-pointer transform hover:scale-105 active:scale-95 touch-manipulation"
+    <div className="group bg-white/95 dark:bg-gray-800/95 backdrop-blur-sm rounded-lg p-3 border border-gray-200/60 dark:border-gray-700/60 hover:shadow-md hover:shadow-purple-500/20 transition-all duration-300 hover:-translate-y-1 cursor-pointer transform hover:scale-102 active:scale-98 touch-manipulation"
          onClick={handleCopy}>
       <div className="flex items-center justify-between">
-        <div className="flex items-center gap-3 flex-1">
-          <div className={`w-12 h-12 rounded-full flex items-center justify-center ${avatarColor} transition-all duration-200 group-hover:scale-110 font-bold text-lg`}>
+        <div className="flex items-center gap-2 flex-1 min-w-0">
+          <div className={`w-8 h-8 rounded-full flex items-center justify-center ${avatarColor} transition-all duration-200 group-hover:scale-110 font-semibold text-sm shadow-sm`}>
             {name.firstName.charAt(0).toUpperCase()}
           </div>
           <div className="flex-1 min-w-0">
-            <h3 className="font-semibold text-gray-900 dark:text-white text-lg group-hover:text-purple-600 dark:group-hover:text-purple-400 transition-colors truncate">
+            <h3 className="font-medium text-gray-900 dark:text-white text-sm group-hover:text-purple-600 dark:group-hover:text-purple-400 transition-colors truncate">
               {name.fullName}
             </h3>
-            <div className="flex items-center gap-2 mt-1">
-              <span className="text-sm text-gray-500 dark:text-gray-400 capitalize">
+            <div className="flex items-center gap-2 mt-0.5">
+              <span className="text-xs text-gray-500 dark:text-gray-400 capitalize">
                 {genderEmoji} {name.gender}
               </span>
-              <span className="text-xs text-gray-400 dark:text-gray-500 uppercase tracking-wide">
+              <span className="text-xs text-gray-400 dark:text-gray-500 uppercase tracking-wide font-medium">
                 {name.country}
               </span>
             </div>
@@ -70,19 +70,19 @@ const NameCard: React.FC<NameCardProps> = ({ name }) => {
         </div>
         
         <button
-          className="opacity-0 group-hover:opacity-100 p-3 rounded-lg bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 transition-all duration-200 transform hover:scale-110 active:scale-95 touch-manipulation"
+          className="opacity-0 group-hover:opacity-100 p-2 rounded-md bg-gray-100/80 dark:bg-gray-700/80 hover:bg-gray-200 dark:hover:bg-gray-600 transition-all duration-200 transform hover:scale-110 active:scale-95 touch-manipulation"
           aria-label={`Copy ${name.fullName}`}
           onClick={(e) => {
             e.stopPropagation();
             handleCopy();
           }}
         >
-          <Copy className="w-4 h-4 text-gray-600 dark:text-gray-300" />
+          <Copy className="w-3 h-3 text-gray-600 dark:text-gray-300" />
         </button>
       </div>
       
       {/* Subtle click indicator */}
-      <div className="mt-3 text-xs text-center text-gray-400 dark:text-gray-500 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+      <div className="mt-2 text-xs text-center text-gray-400 dark:text-gray-500 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
         Click to copy
       </div>
     </div>
