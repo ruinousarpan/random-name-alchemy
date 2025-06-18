@@ -1,3 +1,4 @@
+
 import { useEffect } from "react";
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
@@ -14,7 +15,7 @@ const usePageTracking = () => {
   const location = useLocation();
 
   useEffect(() => {
-    if (typeof window.gtag === "function") {
+    if (typeof window !== 'undefined' && window.gtag) {
       window.gtag("config", "G-N033TEH3HC", {
         page_path: location.pathname,
       });
