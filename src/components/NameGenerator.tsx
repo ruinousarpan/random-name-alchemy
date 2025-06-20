@@ -1,7 +1,7 @@
-
 import React, { useState, useEffect } from 'react';
 import { generateRandomNames, downloadAsText, downloadAsCSV, copyToClipboard, type GenderFilter, type GeneratedName } from '../utils/nameGenerator';
 import { type CountryCode } from '../data/countryNames';
+import { useStats } from '../hooks/useStats';
 import { toast } from '@/hooks/use-toast';
 import Header from './Header';
 import GenerationControls from './GenerationControls';
@@ -16,6 +16,7 @@ const NameGenerator: React.FC = () => {
   const [isGenerating, setIsGenerating] = useState(false);
   const [nameCount, setNameCount] = useState(100);
   const [searchQuery, setSearchQuery] = useState('');
+  const { incrementGenerated } = useStats();
 
   useEffect(() => {
     generateNames();
@@ -42,6 +43,7 @@ const NameGenerator: React.FC = () => {
       const newNames = generateRandomNames(nameCount, genderFilter, country);
       setNames(newNames);
       setSearchQuery(''); // Clear search when generating new names
+      incrementGenerated(nameCount, country);
       setIsGenerating(false);
       toast({
         title: "Names Generated!",
