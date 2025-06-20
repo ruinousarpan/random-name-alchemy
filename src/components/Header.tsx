@@ -1,5 +1,6 @@
 
 import React from 'react';
+import { FileText } from 'lucide-react';
 import ThemeToggle from './ThemeToggle';
 
 const Header: React.FC = () => {
@@ -43,7 +44,21 @@ const Header: React.FC = () => {
               </span>
             </div>
           </div>
-          <ThemeToggle />
+          
+          {/* Top right buttons */}
+          <div className="flex items-center gap-3">
+            <a 
+              href="https://github.com/getrandomnames/random-name-generator#readme"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center gap-2 px-4 py-2 bg-white/10 backdrop-blur-sm rounded-lg text-white/90 border border-white/20 hover:bg-white/20 transition-all duration-300 hover:scale-105 active:scale-95 touch-manipulation"
+              aria-label="View README documentation"
+            >
+              <FileText className="w-4 h-4" />
+              <span className="hidden sm:inline">README</span>
+            </a>
+            <ThemeToggle />
+          </div>
         </div>
       </div>
     </div>
