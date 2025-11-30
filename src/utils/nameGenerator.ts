@@ -1,6 +1,7 @@
 import { countryNameData, type CountryCode } from '../data/countryNames';
 
 export type GenderFilter = 'male' | 'female' | 'mixed';
+export type GeneratorMode = 'person' | 'username' | 'pet';
 
 export interface GeneratedName {
   id: string;
@@ -11,12 +12,97 @@ export interface GeneratedName {
   country: CountryCode;
 }
 
+// Username generation data
+const usernameAdjectives = [
+  'Shadow', 'Dark', 'Silent', 'Toxic', 'Neon', 'Royal', 'Frost', 'Cyber', 
+  'Phantom', 'Thunder', 'Lightning', 'Fire', 'Ice', 'Storm', 'Crimson', 'Mystic',
+  'Savage', 'Wild', 'Epic', 'Legendary', 'Supreme', 'Ultimate', 'Elite', 'Alpha',
+  'Beta', 'Omega', 'Quantum', 'Digital', 'Cosmic', 'Stellar', 'Lunar', 'Solar',
+  'Ghost', 'Stealth', 'Ninja', 'Rogue', 'Knight', 'Dragon', 'Phoenix', 'Titan'
+];
+
+const usernameNouns = [
+  'Wolf', 'Sniper', 'Gamer', 'Rider', 'Hunter', 'Warrior', 'Knight', 'Assassin',
+  'Demon', 'Angel', 'Beast', 'Legend', 'Master', 'King', 'Queen', 'Prince',
+  'Shadow', 'Blade', 'Storm', 'Thunder', 'Lightning', 'Fire', 'Ice', 'Dragon',
+  'Phoenix', 'Tiger', 'Lion', 'Eagle', 'Hawk', 'Raven', 'Viper', 'Cobra',
+  'Reaper', 'Ninja', 'Samurai', 'Slayer', 'Destroyer', 'Conqueror', 'Emperor', 'Titan'
+];
+
+const usernameConnectors = ['_', '-', '', 'X', 'x'];
+
+// Pet name data
+const petNames = [
+  'Milo', 'Luna', 'Simba', 'Bella', 'Oreo', 'Whiskers', 'Coco', 'Bruno', 
+  'Shadow', 'Misty', 'Snowy', 'Ginger', 'Charlie', 'Max', 'Daisy', 'Lucy',
+  'Oliver', 'Leo', 'Lily', 'Molly', 'Bailey', 'Sadie', 'Rocky', 'Cooper',
+  'Buddy', 'Tucker', 'Duke', 'Bear', 'Jack', 'Bentley', 'Toby', 'Zeus',
+  'Sophie', 'Stella', 'Penny', 'Lola', 'Chloe', 'Zoe', 'Nala', 'Ruby',
+  'Oscar', 'Jasper', 'Teddy', 'Winston', 'Finn', 'Buster', 'Sam', 'Dexter',
+  'Rosie', 'Gracie', 'Pepper', 'Cookie', 'Princess', 'Peanut', 'Honey', 'Angel'
+];
+
+const petSuffixes = ['', '', '', '', 'Paws', 'Jr', 'the Great', 'the Brave'];
+
+const generateUsername = (index: number): GeneratedName => {
+  const adjective = usernameAdjectives[Math.floor(Math.random() * usernameAdjectives.length)];
+  const noun = usernameNouns[Math.floor(Math.random() * usernameNouns.length)];
+  const connector = usernameConnectors[Math.floor(Math.random() * usernameConnectors.length)];
+  const hasNumber = Math.random() > 0.5;
+  const number = hasNumber ? Math.floor(Math.random() * 100) : '';
+  
+  const username = `${adjective}${connector}${noun}${number}`;
+  
+  return {
+    id: `username-${index}-${Date.now()}`,
+    firstName: adjective,
+    lastName: noun,
+    fullName: username,
+    gender: 'male',
+    country: 'usa'
+  };
+};
+
+const generatePetName = (index: number): GeneratedName => {
+  const name = petNames[Math.floor(Math.random() * petNames.length)];
+  const suffix = petSuffixes[Math.floor(Math.random() * petSuffixes.length)];
+  const fullName = suffix ? `${name} ${suffix}` : name;
+  
+  return {
+    id: `pet-${index}-${Date.now()}`,
+    firstName: name,
+    lastName: suffix,
+    fullName: fullName,
+    gender: Math.random() > 0.5 ? 'male' : 'female',
+    country: 'usa'
+  };
+};
+
 export const generateRandomNames = (
   count: number = 100, 
   genderFilter: GenderFilter = 'mixed',
-  country: CountryCode = 'usa'
+  country: CountryCode = 'usa',
+  mode: GeneratorMode = 'person'
 ): GeneratedName[] => {
   const names: GeneratedName[] = [];
+  
+  // Generate usernames
+  if (mode === 'username') {
+    for (let i = 0; i < count; i++) {
+      names.push(generateUsername(i));
+    }
+    return names;
+  }
+  
+  // Generate pet names
+  if (mode === 'pet') {
+    for (let i = 0; i < count; i++) {
+      names.push(generatePetName(i));
+    }
+    return names;
+  }
+  
+  // Generate person names (default)
   const countryData = countryNameData[country];
   
   if (!countryData) {

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { generateRandomNames, downloadAsText, downloadAsCSV, copyToClipboard, type GenderFilter, type GeneratedName } from '../utils/nameGenerator';
+import { generateRandomNames, downloadAsText, downloadAsCSV, copyToClipboard, type GenderFilter, type GeneratedName, type GeneratorMode } from '../utils/nameGenerator';
 import { type CountryCode } from '../data/countryNames';
 import { useStats } from '../hooks/useStats';
 import { toast } from '@/hooks/use-toast';
@@ -8,11 +8,21 @@ import GenerationControls from './GenerationControls';
 import NamesList from './NamesList';
 import Footer from './Footer';
 
-const NameGenerator: React.FC = () => {
+interface NameGeneratorProps {
+  mode?: GeneratorMode;
+  initialCountry?: CountryCode;
+  hideCountrySelector?: boolean;
+}
+
+const NameGenerator: React.FC<NameGeneratorProps> = ({ 
+  mode = 'person',
+  initialCountry = 'usa',
+  hideCountrySelector = false
+}) => {
   const [names, setNames] = useState<GeneratedName[]>([]);
   const [filteredNames, setFilteredNames] = useState<GeneratedName[]>([]);
   const [genderFilter, setGenderFilter] = useState<GenderFilter>('mixed');
-  const [country, setCountry] = useState<CountryCode>('usa');
+  const [country, setCountry] = useState<CountryCode>(initialCountry);
   const [isGenerating, setIsGenerating] = useState(false);
   const [nameCount, setNameCount] = useState(100);
   const [searchQuery, setSearchQuery] = useState('');
@@ -40,14 +50,16 @@ const NameGenerator: React.FC = () => {
     setIsGenerating(true);
     // Add a small delay for better UX
     setTimeout(() => {
-      const newNames = generateRandomNames(nameCount, genderFilter, country);
+      const newNames = generateRandomNames(nameCount, genderFilter, country, mode);
       setNames(newNames);
       setSearchQuery(''); // Clear search when generating new names
       incrementGenerated(nameCount, country);
       setIsGenerating(false);
+      
+      const modeLabel = mode === 'username' ? 'usernames' : mode === 'pet' ? 'pet names' : `names from ${country.toUpperCase()}`;
       toast({
         title: "Names Generated!",
-        description: `Generated ${nameCount} random names from ${country.toUpperCase()}`,
+        description: `Generated ${nameCount} random ${modeLabel}`,
       });
     }, 500);
   };
@@ -126,6 +138,8 @@ const NameGenerator: React.FC = () => {
           onCopyAll={handleCopyAll}
           onDownloadTxt={handleDownloadTxt}
           onDownloadCsv={handleDownloadCsv}
+          hideCountrySelector={hideCountrySelector}
+          hideGenderFilter={mode !== 'person'}
         />
       </div>
 

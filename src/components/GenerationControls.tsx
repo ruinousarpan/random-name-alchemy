@@ -17,6 +17,8 @@ interface GenerationControlsProps {
   onCopyAll: () => void;
   onDownloadTxt: () => void;
   onDownloadCsv: () => void;
+  hideCountrySelector?: boolean;
+  hideGenderFilter?: boolean;
 }
 
 const GenerationControls: React.FC<GenerationControlsProps> = ({
@@ -31,7 +33,10 @@ const GenerationControls: React.FC<GenerationControlsProps> = ({
   onCopyAll,
   onDownloadTxt,
   onDownloadCsv,
+  hideCountrySelector = false,
+  hideGenderFilter = false,
 }) => {
+  const totalCols = hideCountrySelector && hideGenderFilter ? 3 : hideCountrySelector || hideGenderFilter ? 4 : 5;
   return (
     <div className="relative">
       {/* Enhanced glass container with better shadows */}
@@ -39,9 +44,9 @@ const GenerationControls: React.FC<GenerationControlsProps> = ({
         {/* Subtle inner glow */}
         <div className="absolute inset-0 bg-gradient-to-r from-white/5 via-transparent to-white/5 rounded-3xl"></div>
         
-        <div className="relative z-10 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8">
+        <div className={`relative z-10 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-${totalCols} gap-8`}>
           {/* Country Selector */}
-          <div className="space-y-3">
+          {!hideCountrySelector && <div className="space-y-3">
             <label className="block text-white/90 text-sm font-semibold mb-3 tracking-wide">
               🌍 Country
             </label>
@@ -57,10 +62,10 @@ const GenerationControls: React.FC<GenerationControlsProps> = ({
                 ))}
               </SelectContent>
             </Select>
-          </div>
+          </div>}
 
           {/* Gender Filter - Enhanced Button Group */}
-          <div className="space-y-3">
+          {!hideGenderFilter && <div className="space-y-3">
             <label className="block text-white/90 text-sm font-semibold mb-3 tracking-wide">
               ⚧ Gender
             </label>
@@ -83,7 +88,7 @@ const GenerationControls: React.FC<GenerationControlsProps> = ({
                 </button>
               ))}
             </div>
-          </div>
+          </div>}
 
           {/* Enhanced Name Count Input */}
           <div className="space-y-3">

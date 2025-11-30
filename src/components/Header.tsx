@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { FileText, Heart, BarChart3 } from 'lucide-react';
+import { FileText, Heart, BarChart3, Menu, X } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import ThemeToggle from './ThemeToggle';
 import FavoritesPanel from './FavoritesPanel';
@@ -9,6 +9,7 @@ import { useFavorites } from '../hooks/useFavorites';
 const Header: React.FC = () => {
   const [showFavorites, setShowFavorites] = useState(false);
   const [showStats, setShowStats] = useState(false);
+  const [showMenu, setShowMenu] = useState(false);
   const { favorites } = useFavorites();
 
   return (
@@ -27,6 +28,37 @@ const Header: React.FC = () => {
         </div>
 
         <div className="relative container mx-auto px-4 py-16 z-10">
+          {/* Navigation */}
+          <nav className="flex justify-between items-center mb-8">
+            <Link to="/" className="text-2xl font-bold text-white hover:text-yellow-300 transition-colors">
+              GetRandomNames
+            </Link>
+            
+            <div className="hidden md:flex items-center gap-6">
+              <Link to="/" className="text-white/90 hover:text-white transition-colors">Home</Link>
+              <Link to="/username-generator" className="text-white/90 hover:text-white transition-colors">Usernames</Link>
+              <Link to="/baby-name-generator" className="text-white/90 hover:text-white transition-colors">Baby Names</Link>
+              <Link to="/indian-names" className="text-white/90 hover:text-white transition-colors">Indian Names</Link>
+              <Link to="/pet-names" className="text-white/90 hover:text-white transition-colors">Pet Names</Link>
+            </div>
+            
+            <button onClick={() => setShowMenu(!showMenu)} className="md:hidden text-white p-2">
+              {showMenu ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+            </button>
+          </nav>
+          
+          {showMenu && (
+            <div className="md:hidden bg-white/10 backdrop-blur-xl rounded-2xl p-4 mb-8 border border-white/20">
+              <div className="flex flex-col gap-3">
+                <Link to="/" onClick={() => setShowMenu(false)} className="text-white/90 hover:text-white transition-colors p-2">Home</Link>
+                <Link to="/username-generator" onClick={() => setShowMenu(false)} className="text-white/90 hover:text-white transition-colors p-2">Usernames</Link>
+                <Link to="/baby-name-generator" onClick={() => setShowMenu(false)} className="text-white/90 hover:text-white transition-colors p-2">Baby Names</Link>
+                <Link to="/indian-names" onClick={() => setShowMenu(false)} className="text-white/90 hover:text-white transition-colors p-2">Indian Names</Link>
+                <Link to="/pet-names" onClick={() => setShowMenu(false)} className="text-white/90 hover:text-white transition-colors p-2">Pet Names</Link>
+              </div>
+            </div>
+          )}
+          
           <div className="flex justify-between items-start mb-12">
             <div className="max-w-4xl">
               <h1 className="text-5xl md:text-7xl font-bold text-white mb-6 drop-shadow-2xl leading-tight">
