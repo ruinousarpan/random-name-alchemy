@@ -89,9 +89,6 @@ const StatsPanel: React.FC<StatsPanelProps> = ({ isOpen, onClose }) => {
             <div className="bg-white/10 rounded-xl p-4 border border-white/10">
               <h3 className="text-white font-semibold mb-2">Most Recent Country</h3>
               <div className="flex items-center gap-2">
-                <span className="text-2xl">
-                  {countryNameData[stats.favoriteCountry as keyof typeof countryNameData]?.flag}
-                </span>
                 <span className="text-white">
                   {countryNameData[stats.favoriteCountry as keyof typeof countryNameData]?.label}
                 </span>

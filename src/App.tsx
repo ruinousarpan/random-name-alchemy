@@ -5,7 +5,12 @@ import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
+import { HelmetProvider } from "react-helmet-async";
 import Index from "./pages/Index";
+import UsernameGenerator from "./pages/UsernameGenerator";
+import BabyNameGenerator from "./pages/BabyNameGenerator";
+import IndianNames from "./pages/IndianNames";
+import PetNames from "./pages/PetNames";
 import Readme from "./pages/Readme";
 import NotFound from "./pages/NotFound";
 
@@ -30,8 +35,11 @@ const AppRoutes = () => {
   return (
     <Routes>
       <Route path="/" element={<Index />} />
+      <Route path="/username-generator" element={<UsernameGenerator />} />
+      <Route path="/baby-name-generator" element={<BabyNameGenerator />} />
+      <Route path="/indian-names" element={<IndianNames />} />
+      <Route path="/pet-names" element={<PetNames />} />
       <Route path="/readme" element={<Readme />} />
-      {/* Add more routes as needed */}
       <Route path="*" element={<NotFound />} />
     </Routes>
   );
@@ -55,15 +63,17 @@ const App = () => {
   }, []);
 
   return (
-    <QueryClientProvider client={queryClient}>
-      <TooltipProvider>
-        <Toaster />
-        <Sonner />
-        <BrowserRouter>
-          <AppRoutes />
-        </BrowserRouter>
-      </TooltipProvider>
-    </QueryClientProvider>
+    <HelmetProvider>
+      <QueryClientProvider client={queryClient}>
+        <TooltipProvider>
+          <Toaster />
+          <Sonner />
+          <BrowserRouter>
+            <AppRoutes />
+          </BrowserRouter>
+        </TooltipProvider>
+      </QueryClientProvider>
+    </HelmetProvider>
   );
 };
 
